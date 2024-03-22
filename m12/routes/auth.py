@@ -14,8 +14,8 @@ router = APIRouter(prefix='/auth', tags=["auth"])
 security = HTTPBearer()
 
 
-@router.post("/signup", response_model=UserIn, status_code=status.HTTP_201_CREATED)
-async def signup(body: UserOut, db: Session = Depends(get_db)):
+@router.post("/signup", response_model=UserOut, status_code=status.HTTP_201_CREATED)
+async def signup(body: UserIn, db: Session = Depends(get_db)):
     exist_user = await repository_users.get_user_by_email(body.email, db)
     if exist_user:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Account already exists")
@@ -29,6 +29,7 @@ async def signup(body: UserOut, db: Session = Depends(get_db)):
         print("Error while saving user to database:", e)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             detail="Error while saving user to database")
+    return UserOut(id=new_user.id, username=new_user.username, email=new_user.email)
 
 
 @router.post("/login", response_model=TokenModel)
@@ -42,6 +43,10 @@ async def login(body: OAuth2PasswordRequestForm = Depends(), db: Session = Depen
     refresh_token = await auth_service.create_refresh_token(data={"sub": user.email})
     await repository_users.update_token(user, refresh_token, db)
     return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
+
+
+
+
 
 
 @router.get('/refresh_token', response_model=TokenModel)

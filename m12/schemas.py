@@ -23,11 +23,11 @@ class UserIn(BaseModel):
     email: str
     password: str = Field(min_length=6, max_length=10)
 
-class UserOut(UserIn):
+class UserOut(BaseModel):
     id: int
     username: str
     email: str
-    created_at: datetime
+
 
 
     class Config:
