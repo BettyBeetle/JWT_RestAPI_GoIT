@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from m12.routes import auth, contacts
 import uvicorn
+
+
 app = FastAPI()
 
 app.include_router(auth.router, prefix='/api')

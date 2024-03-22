@@ -9,15 +9,13 @@ class ContactsIn(BaseModel):
     phone_number: str
     date_of_birth: date
     nick: Optional[str]= None
-    password: str = Field(min_length=6, max_length=10)
 
 class ContactsOut(ContactsIn):
     id: int
-    password: Optional[str] = None
+
 
     class Config:
         orm_mode = True
-
 
 
 class UserIn(BaseModel):

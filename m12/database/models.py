@@ -14,7 +14,7 @@ class Contacts(Base):
     phone_number = Column(String, index=True, nullable=False)
     date_of_birth = Column(Date, nullable=True)
     nick = Column(String, nullable=True, default=None)
-    user_id = Column("user_id", ForeignKey("users.id", ondelete="CASCADE"), default=None)
+    user_id = Column("user_id", ForeignKey("users.id", ondelete="CASCADE"))
     user = relationship("User", backref="contacts")
 
 
